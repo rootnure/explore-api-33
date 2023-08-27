@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments</title>
+    <style>
+        .grid {
+            display: grid;
+        }
+        .grid-cols-5 {
+            grid-template-columns: repeat(5, 1fr);
+        }
+        .p-3 {
+            padding: 12px;
+        }
+        .m-2{
+            margin: 8px;
+        }
+        .rounded-xl {
+            border-radius: 12px;
+        }
+        .bg-\[\lightgray\] {
+            background-color: lightgray;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-justify {
+            text-align: justify;
+        }
+        .flex {
+            display: flex;
+        }
+        .justify-between {
+            justify-content: space-between;
+        }
+        .capitalize {
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+    <main>
+        <section>
+            <h1>All Comments Here</h1>
+            <div id="comments-container" class="grid grid-cols-5">
+
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const loadComments = () => {
+            fetch('https://jsonplaceholder.typicode.com/comments')
+            .then(res => res.json())
+            .then(data => showComments(data));
+        }
+
+        const showComments = comments => {
+            const commentsContainer = document.getElementById('comments-container');
+            for(const comment of comments) {
+                const {id, postId, name, email, body} = comment;
+                const commentDiv = document.createElement('div');
+                commentDiv.innerHTML = `
+                <h3 class="text-center capitalize">${name}</h3>
+                <p>Post By: <small><a href="mailto:${email}">${email}</a></small></p>
+                <p class="text-justify">${body.length > 100? `${body.slice(0, 100)}... Read More` : body}</p>
+                <h5 class="flex justify-between"><span>Post Id: ${postId}</span><small>Comment Id: ${id}</small></h5>
+                `;
+                commentDiv.classList.add('p-3', 'm-2', 'rounded-xl', 'bg-[lightgray]');
+                commentsContainer.appendChild(commentDiv);
+            }
+        }
+        
+        loadComments();
+    </script>
+</body>
+</html>
