@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photos</title>
+    <style>
+        .grid {
+            display: grid;
+        }
+        .grid-cols-12 {
+            grid-template-columns: repeat(12, 1fr);
+        }
+        .rounded-xl {
+            border-radius: 12px;
+        }
+        .border-box {
+            box-sizing: border-box;
+        }
+        .p-3 {
+            padding: 12px;
+        }
+        .max-h-32 {
+            max-height: 128px;
+        }
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+    <main>
+        <section>
+            <h1>All Photos Here</h1>
+            <div id="photos-container" class="grid grid-cols-12">
+
+            </div>
+        </section>
+    </main>
+    <script>
+        const loadPhotos = () => {
+            fetch('https://jsonplaceholder.typicode.com/photos')
+            .then(res => res.json())
+            .then(data => showPhotos(data))
+        }
+        const showPhotos = photos => {
+            const photosContainer = document.getElementById('photos-container');
+            photos = photos.slice(3500, 3524);
+            for(const photo of photos) {
+                const {id, albumId, title, thumbnailUrl:url} = photo;
+                const cardDiv = document.createElement('div');
+                cardDiv.innerHTML = `
+                    <img class="rounded-xl w-full p-3 max-h-32" src="${url}" alt="${title}">
+                    <p class="text-center">Album Id: ${albumId}.${id}</p>
+                `;
+                cardDiv.classList.add('border-box')
+                photosContainer.appendChild(cardDiv);
+            }
+        }
+        loadPhotos();
+    </script>
+</body>
+</html>
